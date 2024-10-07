@@ -1,0 +1,75 @@
+# Write your solution here
+def retrieve_all() : 
+    ls = []
+    import urllib.request 
+    import json 
+
+    url_file = urllib.request.urlopen("https://studies.cs.helsinki.fi/stats-mock/api/courses")
+    
+    data = url_file.read()
+    
+    classes = json.loads(data)
+        
+    for clas in classes : 
+        
+        if clas["enabled"] == True : 
+            t = 0 
+            print(clas)
+            for i in clas["exercises"] : 
+                t += i
+            tup = (clas["fullName"], clas["name"], clas["year"], t)
+            ls.append(tup)
+    return ls
+
+def retrieve_course(course_name: str) :
+    import urllib.request
+    import json 
+
+    url_file = urllib.request.urlopen(f"https://studies.cs.helsinki.fi/stats-mock/api/courses/{course_name}/stats")
+    
+    data = url_file.read()
+    
+    
+    clas = json.loads(data)
+    new = {}
+    students = []
+    hours_avg = 0
+    hours = 0
+    exercises = 0
+    for i in range(0, len(clas) + 1) : 
+        weeks = 0
+        exerAvg = 0
+        
+        try : 
+            clas[f"{i}"]
+        except : 
+            
+            continue
+
+        for key, value in clas[f"{i}"].items() : 
+
+            if key == "students" :
+                students.append(value)
+            if key == "hour_total" :
+                hours += value
+            if key == "exercise_total" :
+                exercises += value
+
+    weeks = len(clas)
+    hours_avg = hours // max(sorted(students))
+    exerAvg = exercises // max(sorted(students))
+    new = {
+        "weeks": weeks,
+        "students": max(sorted(students)),
+        "hours": hours,
+        "hours_average": hours_avg,
+        "exercises": exercises,
+        "exercises_average": exerAvg
+    }
+    print(new)
+    return new 
+
+
+if __name__ == "__main__" : 
+    retrieve_course("CCFUN")
+
