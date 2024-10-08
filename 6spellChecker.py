@@ -1,4 +1,4 @@
-# write your solution here
+# my solution here, "model solution at end" (more memory?)
 last = []
 line = input("write text: ")
 normline = line.split(" ")
@@ -27,3 +27,24 @@ for i in range(0,len(normline)) :
             print(f"*{normline[i]}*", end=" ")
         else : 
             print(f"*{normline[i]}*")
+
+--------------
+def wordlist():
+    words = []
+ 
+    with open("wordlist.txt") as file:
+        for row in file:
+            words.append(row.strip())
+ 
+    return words
+ 
+words = wordlist()
+sentence = input("Write text: ")
+ 
+for word in sentence.split(' '):
+    if word.lower() in words:
+        print(word + " ", end="")
+    else:
+        print("*" + word + "* ", end="")
+ 
+print()
